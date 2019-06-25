@@ -1,1 +1,1 @@
-DEV PHP7.2 Docker
+DEV PHP7.3 LAMP Docker
