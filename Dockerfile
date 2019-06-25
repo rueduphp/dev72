@@ -23,7 +23,9 @@ RUN apt-get update && \
         libxml2-dev
 
 # Install redis extention
-RUN docker-php-ext-install redis
+RUN pecl install -o -f redis \
+&&  rm -rf /tmp/pear \
+&&  docker-php-ext-enable redis
 
 # Install for image manipulation
 RUN docker-php-ext-install exif
