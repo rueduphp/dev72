@@ -1,0 +1,44 @@
+version: '2'
+services:
+  php-fpm:
+    build: .
+    network_mode: bridge
+    ports:
+      - "8282:80"
+    links:
+      - mysql
+      - redis
+      - maildev
+    volumes:
+      - ./:/var/www/
+      - ~/.ssh:/root/.ssh
+
+  mysql:
+    image: mariadb
+    network_mode: bridge
+    volumes:
+      - ~/data/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=app
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+    ports:
+      - "3666:3306"
+
+  maildev:
+    network_mode: bridge
+    restart: always
+    image: djfarrelly/maildev
+    ports:
+      - "1199:80"
+
+  redis:
+    image: redis:4.0-alpine
+    network_mode: bridge
+    command: redis-server --appendonly yes
+    ports:
+      - "6175:6379"
+    volumes:
+      - ~/data/redis:/data
